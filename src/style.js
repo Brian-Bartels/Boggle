@@ -1,16 +1,14 @@
-const background = "/background.png";
-
 const style = {
   Grid: {
     display: "grid",
     gridTemplateAreas:
-      '"header header header start" "word word accuracy accuracy" "board board valid invalid" "submit clear empty empty" "footer footer footer footer"',
-    gridTemplateRows: "auto minmax(auto, 10%) auto auto auto",
-    gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
+      '"start word word word" "board board board board" "submit clear empty empty"',
+    //gridTemplateRows: "auto minmax(auto, 10%) auto",
+    //gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
     gridRowGap: "1rem",
     gridColumnGap: "2rem",
-    background: `url(${background}) repeat`,
     padding: "1rem 4rem 1rem",
+    fluid: "true",
     alignItems: "center",
     justifyItems: "center",
     height: "100%"
@@ -20,10 +18,7 @@ const style = {
     fontSize: "2.5rem",
     fontFamily: "Concert One, cursive",
     textTransform: "uppercase",
-    letterSpacing: "0.5rem"
-  },
-  Accuracy: {
-    gridArea: "accuracy"
+    letterSpacing: "0.25rem"
   },
   StartButton: {
     gridArea: "start",
@@ -42,22 +37,6 @@ const style = {
     justifySelf: "flex-start",
     margin: "1rem"
   },
-  ValidWordList: {
-    gridArea: "valid",
-    padding: "0.5rem",
-    alignSelf: "stretch",
-    justifySelf: "stretch",
-    backgroundColor: "rgba(0, 255, 0, 0.1)",
-    border: "0.1rem solid rgba(0, 255, 0, 0.3)"
-  },
-  InvalidWordList: {
-    gridArea: "invalid",
-    padding: "0.5rem",
-    alignSelf: "stretch",
-    justifySelf: "stretch",
-    backgroundColor: "rgba(255, 0, 0, 0.1)",
-    border: "0.1rem solid rgba(255, 0, 0, 0.3)"
-  },
   GameBoard: N => ({
     display: "grid",
     gridArea: "board",
@@ -70,36 +49,21 @@ const style = {
     cursor: "pointer"
   }),
   GameCharacter: {
-    fontSize: "2.5rem",
+    fontSize: "3.5rem",
     fontFamily: "Concert One, cursive",
     textTransform: "uppercase",
     gridColumnStart: "auto",
     gridRowStart: "auto",
     background: "linear-gradient(to top right, #ecca68, #f1c87f)",
-    fontWeight: 600,
+    fontWeight: 550,
     borderStyle: "solid",
     borderSize: "0.5rem",
     boxShadow: "0.2rem 0.2rem 0.2rem #888888",
     textAlign: "center",
-    lineHeight: "1.5rem",
-    width: "1.5rem",
-    height: "1.5rem",
+    width: "5rem",
+    height: "5rem",
     padding: "1.5rem"
   },
-  Header: {
-    gridArea: "header",
-    textAlign: "left",
-    alignSelf: "center",
-    width: "100%",
-    height: "100%"
-  },
-  Footer: {
-    gridArea: "footer",
-    textAlign: "center",
-    alignSelf: "center",
-    width: "100%",
-    height: "100%"
-  }
 };
 
 export default style;

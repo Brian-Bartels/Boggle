@@ -6,8 +6,6 @@ import Grid from "../Grid/Grid";
 import Button from "../Button/Button";
 import List from "../List/List";
 import Text from "../Text/Text";
-import Footer from "../Footer/Footer";
-import Header from "../Header/Header";
 
 class BoggleLayout extends Component {
   static formatAccuracy(accuracy) {
@@ -27,14 +25,6 @@ class BoggleLayout extends Component {
 
   get word() {
     return this.state.word.map(([r, c]) => this.state.Game.board[r][c]).join("");
-  }
-
-  get accuracy() {
-    const valid = this.state.Game.validWords.size;
-    const invalid = this.state.Game.invalidWords.size;
-    const total = valid + invalid || 1;
-
-    return BoggleLayout.formatAccuracy((valid / total) * 100);
   }
 
   renderBoard() {
@@ -111,11 +101,7 @@ class BoggleLayout extends Component {
   handleSubmitWord = async () => {
     const Game = this.state.Game;
 
-    const isValidWord = await Game.validateWord(this.word);
-
-    // Send request to server
-    if (isValidWord) Game.validWords.add(this.word);
-    else Game.invalidWords.add(this.word);
+    await Game.validateWord(this.word);
 
     this.setState(
       {
@@ -143,26 +129,17 @@ class BoggleLayout extends Component {
 
     return (
       <Grid style={style.Grid}>
-        {/*HEADER*/}
-        <Header style={style.Header} />
 
         {/*TOP*/}
-        <Text style={style.Word} text={this.word} />
-        <Text style={style.Accuracy} text={this.accuracy} />
         <Button text="New Game" style={style.RestartButton} handleClick={this.handleStart} />
+        <Text style={style.Word} text={this.word} fluid={true} />
 
         {/*MIDDLE*/}
         <Grid style={style.GameBoard(Game.boardSize)}>{this.renderBoard()}</Grid>
 
-        <List title="Valid Words" style={style.ValidWordList} list={Game.validWords} />
-        <List title="Invalid Words" style={style.InvalidWordList} list={Game.invalidWords} />
-
         {/*BOTTOM*/}
         <Button text="Submit Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={this.handleSubmitWord} />
         <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
-
-        {/*FOOTER*/}
-        <Footer style={style.Footer} />
       </Grid>
     );
   }

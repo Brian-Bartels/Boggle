@@ -1,5 +1,4 @@
 import request from "../../utils/request";
-import { Header } from "../../utils/constants";
 
 export class Boggle {
   static VOWELS = "aeiou";
@@ -36,8 +35,6 @@ export class Boggle {
   }
 
   constructor(build) {
-    this.validWords = new Set();
-    this.invalidWords = new Set();
     this.boardSize = build.boardSize || Boggle.DEFAULT_BOARD_SIZE;
     this.minWordSize = build.minWordSize || Boggle.DEFAULT_MINIMUM_WORD_SIZE;
     this.minConsonantCount = build.minConsonantCount || Boggle.DEFAULT_MINIMUM_CONSONANT_COUNT;
@@ -87,15 +84,17 @@ export class Boggle {
   async validateWord(word) {
     if (word.length < this.minWordSize) return false;
 
-    const { valid } = await request("https://us-central1-hazel-analytics.cloudfunctions.net/boggle-dictionary", {
-      method: "POST",
-      headers: {
-        [Header.CONTENT_TYPE]: "application/json"
-      },
-      body: JSON.stringify({ word })
+    var valid = await request(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=47717a3f-34b8-42a4-95b8-e13af1d30ff0`, {
+      method: "GET",
     });
-
-    return valid;
+    if (valid.length === 0 || typeof(valid[0]) === 'string') {
+      alert("Not a word");
+    } else {
+      if (window.confirm("It's a word! Click Okay to load full definition")) 
+      {
+        window.open(`https://www.merriam-webster.com/dictionary/${word}`);
+      };
+    }
   }
 
   validateSelect(word, [nr, nc]) {

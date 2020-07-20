@@ -124,18 +124,7 @@ class BoggleLayout extends Component {
     var url = await Game.validateWord(this.word);
 
     if (url) {
-      if (window.confirm("It's a word! Click Okay to load full definition")) 
-      {
-        // Create link in memory
-        var a = window.document.createElement("a");
-        a.target = '_blank';
-        a.href = url;
-    
-        // Dispatch fake click
-        var e = window.document.createEvent("MouseEvents");
-        e.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        a.dispatchEvent(e);
-      };
+      window.open(url);
     }
 
     this.setState(

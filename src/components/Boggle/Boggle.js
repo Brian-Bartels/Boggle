@@ -81,23 +81,6 @@ export class Boggle {
     return nx >= 0 && nx < N && Math.abs(px - nx) <= 1;
   }
 
-  async validateWord(word) {
-    if (word.length < this.minWordSize) {
-      alert("Not long enough");
-      return undefined;
-    }
-
-    var valid = await request(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=47717a3f-34b8-42a4-95b8-e13af1d30ff0`, {
-      method: "GET",
-    });
-    if (valid.length === 0 || typeof(valid[0]) === 'string') {
-      alert("Not a word");
-      return undefined;
-    } else {
-      return `https://www.merriam-webster.com/dictionary/${word}`;
-    }
-  }
-
   validateSelect(word, [nr, nc]) {
     if (!word.length) return true;
 

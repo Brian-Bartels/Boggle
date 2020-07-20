@@ -118,11 +118,10 @@ class BoggleLayout extends Component {
     });
   };
 
-  handleSubmitWord = async () => {
+  async handleSubmitWord(event) {
     const Game = this.state.Game;
 
     var url = await Game.validateWord(this.word);
-
     if (url) {
       window.open(url);
     }
@@ -167,7 +166,7 @@ class BoggleLayout extends Component {
         <Grid style={style.GameBoard(Game.boardSize)}>{this.renderBoard()}</Grid>
 
         {/*BOTTOM*/}
-        <Button text="Submit Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={this.handleSubmitWord} />
+        <Button text="Submit Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={(event) => this.handleSubmitWord(event)} />
         <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
         <label>
           Total Seconds: 

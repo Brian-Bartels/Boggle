@@ -2,7 +2,7 @@ const style = {
   Grid: {
     display: "grid",
     gridTemplateAreas:
-      '"start word word word" "board board board board" "submit clear empty empty"',
+      '"start word word word" "board board board board" "submit clear time empty"',
     //gridTemplateRows: "auto minmax(auto, 10%) auto",
     //gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
     gridRowGap: "1rem",
@@ -15,6 +15,13 @@ const style = {
   },
   Word: {
     gridArea: "word",
+    fontSize: "2.5rem",
+    fontFamily: "Concert One, cursive",
+    textTransform: "uppercase",
+    letterSpacing: "0.25rem"
+  },
+  Time: {
+    gridArea: "time",
     fontSize: "2.5rem",
     fontFamily: "Concert One, cursive",
     textTransform: "uppercase",

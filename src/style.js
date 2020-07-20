@@ -2,7 +2,7 @@ const style = {
   Grid: {
     display: "grid",
     gridTemplateAreas:
-      '"start word word word" "board board board board" "submit clear time empty"',
+      '"start word word word" "board board board board" "submit clear entry time"',
     //gridTemplateRows: "auto minmax(auto, 10%) auto",
     //gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
     gridRowGap: "1rem",

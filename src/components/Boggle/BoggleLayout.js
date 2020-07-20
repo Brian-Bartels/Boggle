@@ -121,7 +121,14 @@ class BoggleLayout extends Component {
   handleSubmitWord = async () => {
     const Game = this.state.Game;
 
-    await Game.validateWord(this.word);
+    var url = await Game.validateWord(this.word);
+
+    if (url) {
+      if (window.confirm("It's a word! Click Okay to load full definition")) 
+      {
+        window.open(url);
+      };
+    }
 
     this.setState(
       {

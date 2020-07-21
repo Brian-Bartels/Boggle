@@ -1,8 +1,6 @@
-import request from "../../utils/request";
-
 export class Boggle {
-  static VOWELS = "aeiou";
-  static CONSONANTS = "bcdfghjklmnpqrstvwxyz";
+  static VOWELS = ["a", "e", "i", "o", "u"];
+  static CONSONANTS = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu", "r", "s", "t", "v", "w", "x", "y", "z"];
 
   // Board
   static DEFAULT_BOARD_SIZE = 4;
@@ -49,13 +47,12 @@ export class Boggle {
   }
 
   populateBoard() {
-    console.log("pop board")
     var chars = [];
     const N = this.boardSize;
     this.board = this.createBoard(N);
     this.boardState = this.createBoard(N, false);
     while (true) {
-          // Generate required vowel quantity
+      // Generate required vowel quantity
       for (let i = 0; i < this.minVowelCount; i++) {
         chars.push(Boggle.randomChoice(Boggle.VOWELS));
       }
@@ -67,35 +64,44 @@ export class Boggle {
 
       // Generate remaining vowel/consonant quantity
       while (chars.length < N * N) {
-        chars.push(Boggle.randomChoice(Boggle.VOWELS + Boggle.CONSONANTS));
+        chars.push(Boggle.randomChoice(Boggle.VOWELS.concat(Boggle.CONSONANTS)));
       }
 
       var charCount = {};
       var badBoard = false;
-      for (var i=0; i < N * N; i++) {
-        var character = chars[i];
-        if (charCount[character]) {
-          charCount[character]++;
+      for (var i=0; i < chars.length; i++) {
+        if (charCount[chars[i]]) {
+          charCount[chars[i]]++;
         } else {
-          charCount[character] = 1;
+          charCount[chars[i]] = 1;
         }
       }
+      
+      // count of QU | J | Z | X
+      var badCount = 0;
       for (var key in charCount) {
-        if ((key.toUpperCase() === 'Q' && charCount[key] > 1) || charCount[key] >= 4) {
+        if (charCount[key] >= 4) {
           badBoard = true;
+        } else if (key.toUpperCase() === "QU" || key.toUpperCase() === 'J' || key.toUpperCase() === 'Z' || key.toUpperCase() === 'X') {
+          badCount += charCount[key];
+          if (charCount[key] > 2) {
+            badBoard = true;
+          }
         }
+      }
+      if (badCount > 3) {
+        badBoard = true;
       }
       if (!badBoard) {
         break;
       } else {
-        console.log(chars);
-        console.log("bad board");
+        // that board wasn't good, let's wipe it and try again
         chars = [];
       }
     }
     
     
-    Boggle.shuffle(chars);
+    Boggle.shuffle(chars, 4);
 
     for (let r = 0; r < N; r++) {
       for (let c = 0; c < N; c++) {

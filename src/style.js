@@ -61,7 +61,7 @@ const style = {
     textTransform: "uppercase",
     gridColumnStart: "auto",
     gridRowStart: "auto",
-    background: "linear-gradient(to top right, #ecca68, #f1c87f)",
+    background: "linear-gradient(to top right, #E6E6FA, #F0E6FA)",
     fontWeight: 550,
     borderStyle: "solid",
     borderSize: "0.5rem",

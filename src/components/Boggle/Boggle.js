@@ -9,6 +9,8 @@ export class Boggle {
   static DEFAULT_MINIMUM_WORD_SIZE = 3;
   static DEFAULT_MINIMUM_VOWEL_COUNT = 4;
   static DEFAULT_MINIMUM_CONSONANT_COUNT = 4;
+  static MAXIMUM_REPEAT_COUNT = 4;
+  static MAXIMUM_Q_COUNT = 1;
 
   static randomIntExclusive(min, max) {
     min = Math.ceil(min);
@@ -47,26 +49,52 @@ export class Boggle {
   }
 
   populateBoard() {
-    const chars = [];
+    console.log("pop board")
+    var chars = [];
     const N = this.boardSize;
     this.board = this.createBoard(N);
     this.boardState = this.createBoard(N, false);
+    while (true) {
+          // Generate required vowel quantity
+      for (let i = 0; i < this.minVowelCount; i++) {
+        chars.push(Boggle.randomChoice(Boggle.VOWELS));
+      }
 
-    // Generate required vowel quantity
-    for (let i = 0; i < this.minVowelCount; i++) {
-      chars.push(Boggle.randomChoice(Boggle.VOWELS));
+      // Generate required consonant quantity
+      for (let i = 0; i < this.minConsonantCount; i++) {
+        chars.push(Boggle.randomChoice(Boggle.CONSONANTS));
+      }
+
+      // Generate remaining vowel/consonant quantity
+      while (chars.length < N * N) {
+        chars.push(Boggle.randomChoice(Boggle.VOWELS + Boggle.CONSONANTS));
+      }
+
+      var charCount = {};
+      var badBoard = false;
+      for (var i=0; i < N * N; i++) {
+        var character = chars[i];
+        if (charCount[character]) {
+          charCount[character]++;
+        } else {
+          charCount[character] = 1;
+        }
+      }
+      for (var key in charCount) {
+        if ((key.toUpperCase() === 'Q' && charCount[key] > 1) || charCount[key] >= 4) {
+          badBoard = true;
+        }
+      }
+      if (!badBoard) {
+        break;
+      } else {
+        console.log(chars);
+        console.log("bad board");
+        chars = [];
+      }
     }
-
-    // Generate required consonant quantity
-    for (let i = 0; i < this.minConsonantCount; i++) {
-      chars.push(Boggle.randomChoice(Boggle.CONSONANTS));
-    }
-
-    // Generate remaining vowel/consonant quantity
-    while (chars.length < N * N) {
-      chars.push(Boggle.randomChoice(Boggle.VOWELS + Boggle.CONSONANTS));
-    }
-
+    
+    
     Boggle.shuffle(chars);
 
     for (let r = 0; r < N; r++) {

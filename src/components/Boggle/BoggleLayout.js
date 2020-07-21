@@ -150,7 +150,11 @@ class BoggleLayout extends Component {
         <Grid style={style.GameBoard(Game.boardSize)}>{this.renderBoard()}</Grid>
 
         {/*BOTTOM*/}
-        <Button text="Submit Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={() => {window.open(`https://www.merriam-webster.com/dictionary/${this.word}`)}} />
+        <Button text="Submit Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={() => 
+          {
+            window.open(`https://www.merriam-webster.com/dictionary/${this.word}`);
+            this.handleResetWord();
+          }} />
         <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
         <label>
           Total Seconds: 

@@ -106,7 +106,7 @@ export class Boggle {
     }
     
     
-    Boggle.shuffle(chars, 4);
+    Boggle.shuffle(chars, 10);
 
     for (let r = 0; r < N; r++) {
       for (let c = 0; c < N; c++) {

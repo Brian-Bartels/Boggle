@@ -79,6 +79,11 @@ export class Boggle {
       
       // count of QU | J | Z | X
       var badCount = 0;
+      if (charCount["u"] + charCount["qu"] >= 3) {
+        console.log("Too Many U's");
+        console.log(charCount);
+        badBoard = true;
+      }
       for (var key in charCount) {
         if (charCount[key] >= 4) {
           badBoard = true;

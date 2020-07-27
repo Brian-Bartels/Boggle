@@ -2,11 +2,11 @@ const style = {
   Grid: {
     display: "grid",
     gridTemplateAreas:
-      '"start word word word" "board board board board" "submit clear entry time"',
+      '"word board board board" "submit board board board" "entry board board board" "time board board board"',
     //gridTemplateRows: "auto minmax(auto, 10%) auto",
     //gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
-    gridRowGap: "1rem",
-    gridColumnGap: "2rem",
+    gridRowGap: "0rem",
+    gridColumnGap: "0rem",
     padding: "1rem 4rem 1rem",
     fluid: "true",
     alignItems: "center",
@@ -16,6 +16,7 @@ const style = {
   Word: {
     gridArea: "word",
     fontSize: "2.5rem",
+    height: "2rem",
     fontFamily: "Concert One, cursive",
     textTransform: "uppercase",
     letterSpacing: "0.25rem"
@@ -29,6 +30,7 @@ const style = {
   },
   StartButton: {
     gridArea: "start",
+    alignSelf: "flex-start",
     justifySelf: "flex-end",
     margin: "1rem"
   },

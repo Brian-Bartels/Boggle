@@ -14,6 +14,7 @@ class BoggleLayout extends Component {
       word: [],
       time: 120,
       startTime: 120,
+      minDensity: 25,
       Game: new BoggleBuiler().build()
     };
   }
@@ -128,11 +129,19 @@ class BoggleLayout extends Component {
     });
   };
 
-  handleChange(event) {
+  handleChangeSeconds(event) {
     if (event.target.value === "") {
       this.setState({startTime: 0});
     } else if (!isNaN(String(event.target.value))) {
       this.setState({startTime: parseInt(event.target.value, 10)});
+    }
+  }
+
+  handleChangePoints(event) {
+    if (event.target.value === "") {
+      this.setState({minDensity: 0});
+    } else if (!isNaN(String(event.target.value))) {
+      this.setState({minDensity: parseInt(event.target.value, 10)});
     }
   }
 
@@ -142,24 +151,30 @@ class BoggleLayout extends Component {
     return (
       <Grid style={style.Grid}>
 
-        {/*TOP*/}
-        <Button text="New Game" style={style.RestartButton} handleClick={this.handleStart} />
         <Text style={style.Word} text={this.word} />
 
-        {/*MIDDLE*/}
         <Grid style={style.GameBoard(Game.boardSize)}>{this.renderBoard()}</Grid>
 
-        {/*BOTTOM*/}
-        <Button text="Check Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={() => 
-          {
-            window.open(`https://www.merriam-webster.com/dictionary/${this.word}`);
-            this.handleResetWord();
-          }} />
-        <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
-        <label>
-          Total Seconds: 
-          <input type="text" value={this.state.startTime} onChange={(event) => this.handleChange(event)}/>
-        </label>
+        <div>
+          <Button text="New Game" style={style.StartButton} handleClick={this.handleStart} />
+          <Button text="Check Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={() => 
+            {
+              window.open(`https://www.merriam-webster.com/dictionary/${this.word}`);
+              this.handleResetWord();
+            }} />
+          <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
+        </div>
+        <div>
+          <div>
+            Total Seconds: 
+            <input type="text" size="5" value={this.state.startTime} onChange={(event) => this.handleChangeSeconds(event)}/>
+          </div>
+          <div>
+            Min Points/Board: 
+            <input type="text" size="5" value={this.state.minDensity} onChange={(event) => this.handleChangePoints(event)}/>
+          </div>
+        </div>
+        
         <Text style={style.Time} text={this.state.time} />
       </Grid>
     );

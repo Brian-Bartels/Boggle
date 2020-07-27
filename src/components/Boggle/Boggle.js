@@ -1,6 +1,9 @@
+import { Trie } from "../../utils/Trie";
+
 export class Boggle {
   static VOWELS = ["a", "e", "i", "o", "u"];
   static CONSONANTS = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu", "r", "s", "t", "v", "w", "x", "y", "z"];
+  static ALLCHARS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
   // Board
   static DEFAULT_BOARD_SIZE = 4;
@@ -39,11 +42,116 @@ export class Boggle {
     this.minWordSize = build.minWordSize || Boggle.DEFAULT_MINIMUM_WORD_SIZE;
     this.minConsonantCount = build.minConsonantCount || Boggle.DEFAULT_MINIMUM_CONSONANT_COUNT;
     this.minVowelCount = build.minVowelCount || Boggle.DEFAULT_MINIMUM_VOWEL_COUNT;
-    this.populateBoard();
+    this.populateBoardFullRand();
+    var uniq = this.findAllWords();
+    while ((uniq.join("").length - (uniq.length * 2)) < 25) {
+      console.log((uniq.join("").length - (uniq.length * 2)));
+      this.populateBoardFullRand();
+      uniq = this.findAllWords();
+    }
   }
 
   createBoard(N, defaultValue) {
     return Array.from(new Array(N), () => new Array(N).fill(defaultValue));
+  }
+
+  populateBoardFullRand() {
+    var chars = [];
+    const N = this.boardSize;
+    this.board = this.createBoard(N);
+    this.boardState = this.createBoard(N, false);
+
+    for (let i = 0; i < N * N; i++) {
+      chars.push(Boggle.randomChoice(Boggle.ALLCHARS));
+    }
+
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        this.board[r][c] = chars.pop();
+      }
+    }
+  }
+
+  findAllWords() {
+    var allWords = []
+    for (var i = 0; i < this.boardSize; i++) {
+      for (var j = 0; j < this.boardSize; j++) {
+        var currWords = [];
+        this.findAllWordsFromStart([[i, j]], currWords);
+        allWords.push(...currWords);
+      }
+    }
+    var uniq = [...new Set(allWords)];
+    uniq.sort(function(a, b){
+      return b.length - a.length;
+    });
+    console.log(uniq);
+    return uniq;
+  }
+
+  coordContains(coords, word) {
+    for (const f of word) {
+      if (f[0] === coords[0] && f[1] === coords[1]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  findAllWordsFromStart(word, wordList) {
+    const N = this.boardSize;
+    var [i, j] = word[word.length - 1];
+    if (i < 0 || i >= N || j < 0 || j >= N) {
+      return false;
+    }
+    var engWord = word.map(([i, j]) => this.board[i][j]).join("");
+    var validity = Trie.trie.contains(engWord)
+    if (validity === 0) {
+      return false;
+    }
+    if (!this.coordContains([i + 1, j + 1], word)) {
+      word.push([i + 1, j + 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i + 1, j], word)) {
+      word.push([i + 1, j]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i, j + 1], word)) {
+      word.push([i, j + 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i - 1, j - 1], word)) {
+      word.push([i - 1, j - 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i - 1, j], word)) {
+      word.push([i - 1, j]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i, j - 1], word)) {
+      word.push([i, j - 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i + 1, j - 1], word)) {
+      word.push([i + 1, j - 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (!this.coordContains([i - 1, j + 1], word)) {
+      word.push([i - 1, j + 1]);
+      this.findAllWordsFromStart(word, wordList);
+      word.pop();
+    }
+    if (validity === 1){
+      wordList.push(engWord);
+    }
   }
 
   populateBoard() {

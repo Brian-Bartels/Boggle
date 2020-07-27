@@ -15,8 +15,9 @@ const style = {
   },
   Word: {
     gridArea: "word",
-    fontSize: "2.5rem",
-    height: "2rem",
+    fontSize: "1.5rem",
+    height: "9rem",
+    overflow:"auto",
     fontFamily: "Concert One, cursive",
     textTransform: "uppercase",
     letterSpacing: "0.25rem"
@@ -28,23 +29,17 @@ const style = {
     textTransform: "uppercase",
     letterSpacing: "0.25rem"
   },
-  StartButton: {
-    gridArea: "start",
+  Button: {
+    display:"inline-block",
     alignSelf: "flex-start",
     justifySelf: "flex-end",
-    margin: "1rem"
+    margin: ".25rem",
+    padding: "0px"
   },
-  SubmitWordButton: {
-    gridArea: "submit",
-    alignSelf: "flex-start",
-    justifySelf: "flex-end",
-    margin: "1rem"
-  },
-  ClearWordButton: {
-    gridArea: "clear",
-    alignSelf: "flex-start",
-    justifySelf: "flex-start",
-    margin: "1rem"
+  ButtonGrid: {
+    display: "grid",
+    gridTemplateColumns: "auto auto",
+    gridArea: "submit"
   },
   GameBoard: N => ({
     display: "grid",

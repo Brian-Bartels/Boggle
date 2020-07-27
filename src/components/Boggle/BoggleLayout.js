@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BoggleBuiler } from "./Boggle";
+import { BoggleBuilder } from "./Boggle";
 import style from "../../style";
 import BoggleCharacter from "./BoggleCharacter";
 import Grid from "../Grid/Grid";
@@ -10,18 +10,21 @@ class BoggleLayout extends Component {
 
   static get initialGameState() {
     return {
-      score: 0,
       word: [],
       time: 120,
       startTime: 120,
       minDensity: 25,
-      Game: new BoggleBuiler().build()
+      resultWords: [],
+      Game: new BoggleBuilder().build(25)
     };
   }
 
   state = BoggleLayout.initialGameState;
 
-  get word() {
+  wordEng() {
+    if (this.state.resultWords.length > 0) {
+      return this.state.resultWords;
+    }
     return this.state.word.map(([r, c]) => this.state.Game.board[r][c]).join("");
   }
 
@@ -57,12 +60,13 @@ class BoggleLayout extends Component {
   // Event Handlers
   ////////////////////////
   handleStart = () => {
-    var tempTime = this.state.startTime;
     if (this.state.interval !== undefined) {
       clearInterval(this.state.interval);
     }
-    this.setState(BoggleLayout.initialGameState);
-    this.setState({time: tempTime, startTime: tempTime});
+    this.setState({time: this.state.startTime});
+    this.setState({word: []});
+    this.setState({resultWords: []});
+    this.setState({Game: new BoggleBuilder().build(this.state.minDensity)})
     this.startCountdown(this.state.time);
   };
 
@@ -129,6 +133,10 @@ class BoggleLayout extends Component {
     });
   };
 
+  showResults = () => {
+    this.setState({resultWords: this.state.Game.findAllWords()})
+  }
+
   handleChangeSeconds(event) {
     if (event.target.value === "") {
       this.setState({startTime: 0});
@@ -151,18 +159,19 @@ class BoggleLayout extends Component {
     return (
       <Grid style={style.Grid}>
 
-        <Text style={style.Word} text={this.word} />
+        <Text style={style.Word} text={this.wordEng()} />
 
         <Grid style={style.GameBoard(Game.boardSize)}>{this.renderBoard()}</Grid>
 
-        <div>
-          <Button text="New Game" style={style.StartButton} handleClick={this.handleStart} />
-          <Button text="Check Word" disabled={!this.state.word.length} style={style.SubmitWordButton} handleClick={() => 
+        <div style={style.ButtonGrid}>
+          <Button text="New Game" style={style.Button} handleClick={this.handleStart} />
+          <Button text="Check Word" disabled={!this.state.word.length} style={style.Button} handleClick={() => 
             {
-              window.open(`https://www.merriam-webster.com/dictionary/${this.word}`);
+              window.open(`https://www.merriam-webster.com/dictionary/${this.state.word.map(([r, c]) => this.state.Game.board[r][c]).join("")}`);
               this.handleResetWord();
             }} />
-          <Button text="Clear Word" disabled={!this.state.word.length} style={style.ClearWordButton} handleClick={this.handleResetWord} />
+          <Button text="Solve Board" disabled={this.state.time > 0} style={style.Button} handleClick={this.showResults}/>
+          <Button text="Clear Word" disabled={!this.state.word.length} style={style.Button} handleClick={this.handleResetWord} />
         </div>
         <div>
           <div>

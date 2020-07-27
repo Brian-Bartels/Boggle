@@ -37,14 +37,14 @@ export class Boggle {
     }
   }
 
-  constructor(build) {
+  constructor(build, minDensity) {
     this.boardSize = build.boardSize || Boggle.DEFAULT_BOARD_SIZE;
     this.minWordSize = build.minWordSize || Boggle.DEFAULT_MINIMUM_WORD_SIZE;
     this.minConsonantCount = build.minConsonantCount || Boggle.DEFAULT_MINIMUM_CONSONANT_COUNT;
     this.minVowelCount = build.minVowelCount || Boggle.DEFAULT_MINIMUM_VOWEL_COUNT;
     this.populateBoardFullRand();
     var uniq = this.findAllWords();
-    while ((uniq.join("").length - (uniq.length * 2)) < 25) {
+    while ((uniq.join("").length - (uniq.length * 2)) < minDensity) {
       console.log((uniq.join("").length - (uniq.length * 2)));
       this.populateBoardFullRand();
       uniq = this.findAllWords();
@@ -245,7 +245,7 @@ export class Boggle {
   }
 }
 
-export class BoggleBuiler {
+export class BoggleBuilder {
   withWordSize({ wordSize }) {
     this.minWordSize = wordSize;
     return this;
@@ -261,7 +261,7 @@ export class BoggleBuiler {
     return this;
   }
 
-  build() {
-    return new Boggle(this);
+  build(minDensity) {
+    return new Boggle(this, minDensity);
   }
 }

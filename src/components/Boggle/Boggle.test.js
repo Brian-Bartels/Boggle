@@ -1,10 +1,10 @@
-import { Boggle, BoggleBuiler } from "./Boggle";
+import { Boggle, BoggleBuilder } from "./Boggle";
 
 describe("Boggle", () => {
   let Game;
 
   beforeEach(() => {
-    Game = new BoggleBuiler().build();
+    Game = new BoggleBuilder().build();
   });
 
   describe("#randomIntExclusive", () => {

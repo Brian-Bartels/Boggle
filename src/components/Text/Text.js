@@ -1,9 +1,17 @@
 import React from "react";
 
 const Text = ({ text, style }) => {
+  if (Array.isArray(text)){
+    return (
+      <div style={style}>
+        {text.map((txt) => <h2>{txt}</h2>)}
+      </div>
+    );
+  }
+
   return (
     <div style={style}>
-      <h3>{text}</h3>
+      <h2>{text}</h2>
     </div>
   );
 };

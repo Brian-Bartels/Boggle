@@ -45,7 +45,6 @@ export class Boggle {
     this.populateBoardFullRand();
     var uniq = this.findAllWords();
     while ((uniq.join("").length - (uniq.length * 2)) < minDensity) {
-      console.log((uniq.join("").length - (uniq.length * 2)));
       this.populateBoardFullRand();
       uniq = this.findAllWords();
     }
@@ -85,7 +84,6 @@ export class Boggle {
     uniq.sort(function(a, b){
       return b.length - a.length;
     });
-    console.log(uniq);
     return uniq;
   }
 

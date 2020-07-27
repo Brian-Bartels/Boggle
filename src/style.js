@@ -3,7 +3,7 @@ const style = {
     display: "grid",
     gridTemplateAreas:
       '"word board board board" "submit board board board" "entry board board board" "time board board board"',
-    //gridTemplateRows: "auto minmax(auto, 10%) auto",
+    //gridTemplateRows: "35% auto auto auto",
     //gridTemplateColumns: "auto auto minmax(auto, 15%) minmax(auto, 15%)",
     gridRowGap: "0rem",
     gridColumnGap: "0rem",

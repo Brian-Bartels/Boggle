@@ -46,42 +46,6 @@ export class Trie {
     this._addNode(child, remainder);
   }
 
-  remove(word) {
-    if(!this.root) {
-      return;
-    }
-    // This seems wrong. remove subtree too?
-    if(this.contains(word)) {
-      this._removeNode(this.root, word);
-    }
-  }
-
-  _removeNode(node, word) {
-    if(!node || !word) {
-      return;
-    }
-    node.prefixes--;
-    var letter = word.charAt(0);
-  
-    var child = node.children[letter];
-    if(child) {
-      var remainder = word.substring(1);
-      if(remainder) {
-        if(child.prefixes === 1) {
-          delete node.children[letter];
-        } else {
-          this._removeNode(child, remainder);
-        }
-      } else {
-        if(child.prefixes === 0) {
-          delete node.children[letter];
-        } else {
-          child.isWord = false;
-        }
-      }
-    }
-  }
-
   // 0, not a word
   // 1, Yes a word
   // 2, Not a word but it might be
@@ -153,63 +117,4 @@ export class Trie {
       }
     }
   }
-
-  print() {
-    if(!this.root) {
-      return console.log('No root node found');
-    }
-    var newline = new Node('|');
-    var queue = [this.root, newline];
-    var string = '';
-    while(queue.length) {
-      var node = queue.shift();
-      string += node.data.toString() + ' ';
-      if(node === newline && queue.length) {
-        queue.push(newline);
-      }
-      for(var child in node.children) {
-        if(node.children.hasOwnProperty(child)) {
-          queue.push(node.children[child]);
-        }
-      }
-    }
-    console.log(string.slice(0, -2).trim());
-  }
-
-  printByLevel() {
-    if(!this.root) {
-      return console.log('No root node found');
-    }
-    var newline = new Node('\n');
-    var queue = [this.root, newline];
-    var string = '';
-    while(queue.length) {
-      var node = queue.shift();
-      string += node.data.toString() + (node.data !== '\n' ? ' ' : '');
-      if(node === newline && queue.length) {
-        queue.push(newline);
-      }
-      for(var child in node.children) {
-        if(node.children.hasOwnProperty(child)) {
-          queue.push(node.children[child]);
-        }
-      }
-    }
-    console.log(string.trim());
-  }
 }
-
-// trie.add('one');
-// trie.add('two');
-// trie.add('fifth');
-// trie.add('fifty');
-// trie.print(); // => | o t f | n w i | e o f | t | h y
-// trie.printByLevel(); // => o t f \n n w i \n e o f \n t \n h y
-// console.log('words are: one, two, fifth, fifty:', trie.getWords()); // => [ 'one', 'two', 'fifth', 'fifty' ]
-// console.log('trie count words is 4:', trie.countWords()); // => 4
-// console.log('trie contains one is true:', trie.contains('one')); // => true
-// console.log('trie contains on is false:', trie.contains('on')); // => false
-// trie.remove('one');
-// console.log('trie contains one is false:', trie.contains('one')); // => false
-// console.log('trie count words is 3:', trie.countWords()); // => 3
-// console.log('words are two, fifth, fifty:', trie.getWords()); // => [ 'two', 'fifth', 'fifty' ]

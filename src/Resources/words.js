@@ -1,3 +1,8 @@
+// There are many collections of flat dictionaries online. I chose one that was
+// specifically listed as being a good candidate for word games. However, there
+// are still some missing entries 'TYPER' for example. And some bogus words. What
+// counts as a legit word is forever up for debate so this list should not be used
+// as a way to keep score.
 export const words =
 	["aardvark",
 	"aardvarks",

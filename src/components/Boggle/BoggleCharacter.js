@@ -2,7 +2,7 @@ import React from "react";
 
 const BoggleCharacter = ({ char, row, col, isSelected, isLast, handleClick, style }) => {
   style = {
-    borderColor: isLast ? "yellow" : isSelected ? "blue" : "black",
+    borderColor: isLast ? "pink" : isSelected ? "blue" : "black",
     opacity: isSelected ? "0.60" : "1.0",
     ...style
   };

@@ -1,8 +1,6 @@
 import { Trie } from "../../utils/Trie";
 
 export class Boggle {
-  static VOWELS = ["a", "e", "i", "o", "u"];
-  static CONSONANTS = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu", "r", "s", "t", "v", "w", "x", "y", "z"];
   static ALLCHARS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
   // Board
@@ -20,21 +18,7 @@ export class Boggle {
   }
 
   static randomChoice(collection) {
-    const choice = Boggle.randomIntExclusive(0, collection.length);
-    return collection[choice];
-  }
-
-  static swap(collection, A, B) {
-    [collection[A], collection[B]] = [collection[B], collection[A]];
-  }
-
-  static shuffle(collection, rounds = 3) {
-    const N = collection.length;
-
-    for (let i = 0; i < N * rounds; i++) {
-      const j = Boggle.randomIntExclusive(0, N);
-      Boggle.swap(collection, i % N, j);
-    }
+    return collection[Boggle.randomIntExclusive(0, collection.length)];
   }
 
   constructor(build, minDensity) {
@@ -44,6 +28,7 @@ export class Boggle {
     this.minVowelCount = build.minVowelCount || Boggle.DEFAULT_MINIMUM_VOWEL_COUNT;
     this.populateBoardFullRand();
     var uniq = this.findAllWords();
+    // Counts points on the board. Makes sure that it's above the min density
     while ((uniq.join("").length - (uniq.length * 2)) < minDensity) {
       this.populateBoardFullRand();
       uniq = this.findAllWords();
@@ -55,18 +40,13 @@ export class Boggle {
   }
 
   populateBoardFullRand() {
-    var chars = [];
     const N = this.boardSize;
     this.board = this.createBoard(N);
     this.boardState = this.createBoard(N, false);
 
-    for (let i = 0; i < N * N; i++) {
-      chars.push(Boggle.randomChoice(Boggle.ALLCHARS));
-    }
-
     for (let r = 0; r < N; r++) {
       for (let c = 0; c < N; c++) {
-        this.board[r][c] = chars.pop();
+        this.board[r][c] = Boggle.randomChoice(Boggle.ALLCHARS);
       }
     }
   }
@@ -87,6 +67,7 @@ export class Boggle {
     return uniq;
   }
 
+  // Make sure that word doesn't already contain next char coords
   coordContains(coords, word) {
     for (const f of word) {
       if (f[0] === coords[0] && f[1] === coords[1]) {
@@ -106,6 +87,8 @@ export class Boggle {
     var validity = Trie.trie.contains(engWord)
     if (validity === 0) {
       return false;
+    } else if (validity === 1){
+      wordList.push(engWord);
     }
     if (!this.coordContains([i + 1, j + 1], word)) {
       word.push([i + 1, j + 1]);
@@ -146,78 +129,6 @@ export class Boggle {
       word.push([i - 1, j + 1]);
       this.findAllWordsFromStart(word, wordList);
       word.pop();
-    }
-    if (validity === 1){
-      wordList.push(engWord);
-    }
-  }
-
-  populateBoard() {
-    var chars = [];
-    const N = this.boardSize;
-    this.board = this.createBoard(N);
-    this.boardState = this.createBoard(N, false);
-    while (true) {
-      // Generate required vowel quantity
-      for (let i = 0; i < this.minVowelCount; i++) {
-        chars.push(Boggle.randomChoice(Boggle.VOWELS));
-      }
-
-      // Generate required consonant quantity
-      for (let i = 0; i < this.minConsonantCount; i++) {
-        chars.push(Boggle.randomChoice(Boggle.CONSONANTS));
-      }
-
-      // Generate remaining vowel/consonant quantity
-      while (chars.length < N * N) {
-        chars.push(Boggle.randomChoice(Boggle.VOWELS.concat(Boggle.CONSONANTS)));
-      }
-
-      var charCount = {};
-      var badBoard = false;
-      for (var i=0; i < chars.length; i++) {
-        if (charCount[chars[i]]) {
-          charCount[chars[i]]++;
-        } else {
-          charCount[chars[i]] = 1;
-        }
-      }
-      
-      // count of QU | J | Z | X
-      var badCount = 0;
-      if (charCount["u"] + charCount["qu"] >= 3) {
-        console.log("Too Many U's");
-        console.log(charCount);
-        badBoard = true;
-      }
-      for (var key in charCount) {
-        if (charCount[key] >= 4) {
-          badBoard = true;
-        } else if (key.toUpperCase() === "QU" || key.toUpperCase() === 'J' || key.toUpperCase() === 'Z' || key.toUpperCase() === 'X') {
-          badCount += charCount[key];
-          if (charCount[key] > 2) {
-            badBoard = true;
-          }
-        }
-      }
-      if (badCount > 3) {
-        badBoard = true;
-      }
-      if (!badBoard) {
-        break;
-      } else {
-        // that board wasn't good, let's wipe it and try again
-        chars = [];
-      }
-    }
-    
-    
-    Boggle.shuffle(chars, 10);
-
-    for (let r = 0; r < N; r++) {
-      for (let c = 0; c < N; c++) {
-        this.board[r][c] = chars.pop();
-      }
     }
   }
 
